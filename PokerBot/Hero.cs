@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PokerBot
 {
-    class Hero : Player
+    public class Hero : Player
     {
         
         

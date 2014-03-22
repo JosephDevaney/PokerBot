@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PokerBot
 {
-    class Card
+    public class Card
     {
         /*
          * Cards have a suit and a rank

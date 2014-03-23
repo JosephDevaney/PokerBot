@@ -5,9 +5,16 @@ using System.Text;
 
 namespace PokerBot
 {
-    public class Player
+    public abstract class Player
     {
-        private Card[] hand;
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+        protected Card[] hand;
 
         public Player()
         {
@@ -27,6 +34,24 @@ namespace PokerBot
             }
         }
 
+        public void SortHand()
+        {
+            Card cur;
+            int i, j;
+            for (i = 1; i < hand.Length; i++)
+            {
+                cur = hand[i];
+                j = i;
+
+                while (j > 0 && (hand[j - 1].Rank < cur.Rank))
+                {
+                    hand[j] = hand[j - 1];
+                    j--;
+                }
+                hand[j] = cur;
+            }
+        }
+
         public void DisplayHand()
         {
             foreach (Card c in hand)
@@ -35,5 +60,7 @@ namespace PokerBot
             }
             Console.WriteLine();
         }
+
+        public abstract int[] GetDiscards();
     }
 }

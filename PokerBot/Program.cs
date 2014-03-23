@@ -12,6 +12,7 @@ namespace PokerBot
         static Player hero;
         static Player villain;
         static int dealer;
+        static int curPlay;
 
         static void initialise()
         {
@@ -24,31 +25,37 @@ namespace PokerBot
             players[1] = villain;
 
             dealer = 0;
+            curPlay = dealer;
         }
 
-        static int[] GetDiscards()
+//         static int[] GetDiscards()
+//         {
+//             string cardsToDiscard;
+//             string[] cards;
+//             int[] discards;
+// 
+//             cardsToDiscard = Console.ReadLine();
+//             if (cardsToDiscard == "pat")
+//             {
+//                 discards = null;
+//             }
+//             else
+//             {
+//                 cards = cardsToDiscard.Split(' ');
+//                 discards = new int[cards.Length];
+// 
+//                 for (int i = 0; i < cards.Length; i++)
+//                 {
+//                     discards[i] = Convert.ToInt32(cards[i]);
+//                 }
+//             }
+//             
+//             return discards;
+//         }
+
+        static int NextPlayer(int player)
         {
-            string cardsToDiscard;
-            string[] cards;
-            int[] discards;
-
-            cardsToDiscard = Console.ReadLine();
-            if (cardsToDiscard == "pat")
-            {
-                discards = null;
-            }
-            else
-            {
-                cards = cardsToDiscard.Split(' ');
-                discards = new int[cards.Length];
-
-                for (int i = 0; i < cards.Length; i++)
-                {
-                    discards[i] = Convert.ToInt32(cards[i]);
-                }
-            }
-            
-            return discards;
+            return player = (player + 1) % players.Length;
         }
 
         static void Main(string[] args)
@@ -66,13 +73,24 @@ namespace PokerBot
 
                 for (int i = 0; i < 3; i++)
                 {
-                    discards = GetDiscards();
-                    if (discards != null)
+                    deck.Burn();
+                    curPlay = NextPlayer(dealer);
+                    for (int j = 0; j < players.Length; j++ )
                     {
-                        hero.Discard(discards);
-                        deck.Burn();
-                        deck.DealDiscards(hero, discards);
+                        discards = players[curPlay].GetDiscards();
+                        if (discards != null)
+                        {
+                            players[curPlay].Discard(discards);
+                            deck.DealDiscards(players[curPlay], discards);
+                            Console.WriteLine(players[curPlay].Name + " draws " + discards.Length + " cards.");
+                        }
+                        else
+                        {
+                            Console.WriteLine(players[curPlay].Name + " stands pat.");
+                        }
+                        curPlay = NextPlayer(curPlay);
                     }
+                    
                     
                     hero.DisplayHand();
                 }
@@ -80,11 +98,14 @@ namespace PokerBot
                 Console.Write("Hero: ");
                 hero.DisplayHand();
 
+                villain.SortHand();
                 Console.Write("Villain: ");
                 villain.DisplayHand();
 
                 Console.WriteLine("Press any key to continue!");
                 Console.ReadKey();
+
+                dealer = NextPlayer(dealer);
             }
             
         }

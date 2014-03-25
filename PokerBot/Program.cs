@@ -28,34 +28,22 @@ namespace PokerBot
             curPlay = dealer;
         }
 
-//         static int[] GetDiscards()
-//         {
-//             string cardsToDiscard;
-//             string[] cards;
-//             int[] discards;
-// 
-//             cardsToDiscard = Console.ReadLine();
-//             if (cardsToDiscard == "pat")
-//             {
-//                 discards = null;
-//             }
-//             else
-//             {
-//                 cards = cardsToDiscard.Split(' ');
-//                 discards = new int[cards.Length];
-// 
-//                 for (int i = 0; i < cards.Length; i++)
-//                 {
-//                     discards[i] = Convert.ToInt32(cards[i]);
-//                 }
-//             }
-//             
-//             return discards;
-//         }
-
         static int NextPlayer(int player)
         {
             return player = (player + 1) % players.Length;
+        }
+
+        static Player Winner()
+        {
+            Player winner = players[0];
+            for (int i = 1; i < players.Length; i++ )
+            {
+                if (players[i] > winner)
+                {
+                    winner = players[i];
+                }
+            }
+            return winner;
         }
 
         static void Main(string[] args)
@@ -95,14 +83,24 @@ namespace PokerBot
                     hero.DisplayHand();
                 }
 
-                Console.Write("Hero: ");
+                hero.SortHand();
+                Console.Write("\n\nHero: ");
                 hero.DisplayHand();
 
                 villain.SortHand();
                 Console.Write("Villain: ");
                 villain.DisplayHand();
 
-                Console.WriteLine("Press any key to continue!");
+                if (hero == villain)
+                {
+                    Console.WriteLine("\n\nIt's a draw, both players win!");
+                }
+                else
+                {
+                    Console.WriteLine("\n\n" + Winner() + " wins");
+                }
+
+                Console.WriteLine("\nPress any key to continue!");
                 Console.ReadKey();
 
                 dealer = NextPlayer(dealer);

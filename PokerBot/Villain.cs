@@ -21,18 +21,8 @@ namespace PokerBot
         {
             int[] discards = null;
             List<int> disc = new List<int>();
-            //int numDisc = 0;
-            //int index = 0;
-            int minRank = 8;
+            int minRank = 9;
             SortHand();
-
-//             for (int i = 0; i < hand.Length; i++ )
-//             {
-//                 if (hand[i].Rank > minRank)
-//                 {
-//                     numDisc++;
-//                 }
-//             }
 
             for (int i = 0; i < hand.Length; i++)
             {
@@ -40,13 +30,12 @@ namespace PokerBot
                 {
                     disc.Add(i);
                 }
-                else if (i > 1 && hand[i].Rank == hand[i-1].Rank)
+                else if (i > 0 && hand[i] == hand[i-1])
                 {
                     disc.Add(i);
                 }
             }
 
-            //disc = disc.Distinct().ToList();
             discards = disc.ToArray();
             return discards;
         }

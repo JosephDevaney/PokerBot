@@ -43,13 +43,50 @@ namespace PokerBot
                 cur = hand[i];
                 j = i;
 
-                while (j > 0 && (hand[j - 1].Rank < cur.Rank))
+                while (j > 0 && (hand[j - 1] < cur))
                 {
                     hand[j] = hand[j - 1];
                     j--;
                 }
                 hand[j] = cur;
             }
+        }
+
+        public static bool operator ==(Player a, Player b)
+        {
+            for (int i = 0; i < a.hand.Length; i++ )
+            {
+                if (a.hand[i] != b.hand[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool operator !=(Player a, Player b)
+        {
+            return !(a == b);
+        }
+
+
+        //These are soo wrong, need more thought!
+        // likely a series of if statements if nothing more inventive comes to mind
+        public static bool operator >(Player a, Player b)
+        {
+            for (int i = 0; i < a.hand.Length; i++)
+            {
+                if (a.hand[i] <= b.hand[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool operator <(Player a, Player b)
+        {
+            return !(a > b && a == b);
         }
 
         public void DisplayHand()
@@ -62,5 +99,10 @@ namespace PokerBot
         }
 
         public abstract int[] GetDiscards();
+
+        public override string ToString()
+        {
+            return Name;
+        }
     }
 }

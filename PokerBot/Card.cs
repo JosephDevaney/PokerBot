@@ -48,6 +48,37 @@ namespace PokerBot
         {
 
         }
+
+        public static bool operator ==(Card a, Card b)
+        {
+            return a.Rank == b.Rank;
+        }
+
+        public static bool operator !=(Card a, Card b)
+        {
+            return !(a == b);
+        }
+
+        public static bool operator >(Card a, Card b)
+        {
+            return a.Rank > b.Rank;
+        }
+
+        public static bool operator >=(Card a, Card b)
+        {
+            return (a > b) || (a == b);
+        }
+
+        public static bool operator <(Card a, Card b)
+        {
+            return !(a >= b);
+        }
+
+        public static bool operator <=(Card a, Card b)
+        {
+            return !(a > b);
+        }
+
         public override string ToString()
         {
             char s, r;

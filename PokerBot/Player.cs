@@ -14,49 +14,58 @@ namespace PokerBot
             get { return name; }
             set { name = value; }
         }
-        protected Card[] hand;
+
+        protected Hand hand;  //Hand hand
 
         public Player()
         {
-            hand = new Card[5];
+            hand = new Hand(); //new Hand;
         }
 
         public void SetCard(Card c, int cardNum)
         {
-            hand[cardNum] = c;
+            hand.Set(c, cardNum);
         }
 
         public void Discard(int[] discards)
         {
             for (int i = 0; i < discards.Length; i++ )
             {
-                hand[discards[i]] = null;
+                hand.Set(null, discards[i]);
             }
+        }
+
+        public int[] GetHandEval()
+        {
+            int[] res = HandEvaluator.HandValue(hand);
+            return res;
         }
 
         public void SortHand()
         {
             Card cur;
             int i, j;
-            for (i = 1; i < hand.Length; i++)
+            for (i = 1; i < hand.Size; i++)
             {
-                cur = hand[i];
+                cur = hand.Get(i);  //cur = hand.Get(i);
                 j = i;
 
-                while (j > 0 && (hand[j - 1] < cur))
+                while (j > 0 && (hand.Get(j - 1) < cur))    //&& hand.Get(j-1) < cur
                 {
-                    hand[j] = hand[j - 1];
+                    hand.Set(hand.Get(j-1), j);
                     j--;
                 }
-                hand[j] = cur;
+                hand.Set(cur, j);
             }
         }
 
+
+        #region Operators
         public static bool operator ==(Player a, Player b)
         {
-            for (int i = 0; i < a.hand.Length; i++ )
+            for (int i = 0; i < a.hand.Size; i++ )
             {
-                if (a.hand[i] != b.hand[i])
+                if (a.hand.Get(i) != b.hand.Get(i))
                 {
                     return false;
                 }
@@ -69,14 +78,78 @@ namespace PokerBot
             return !(a == b);
         }
 
-
-        //These are soo wrong, need more thought!
-        // likely a series of if statements if nothing more inventive comes to mind
         public static bool operator >(Player a, Player b)
         {
-            for (int i = 0; i < a.hand.Length; i++)
+            int[] aHand = a.GetHandEval();
+            int[] bHand = b.GetHandEval();
+
+            if (a == b)
             {
-                if (a.hand[i] <= b.hand[i])
+                return false;
+            }
+            if (aHand[0] > bHand[0])
+            {
+                return true;
+            }
+            if (aHand[0] < bHand[0])
+            {
+                return false;
+            }
+            for (int i = 1; i < aHand.Length; i++ )
+            {
+                Card a1, b1;
+                a1 = a.hand.Get(aHand[i]);
+                b1 = b.hand.Get(bHand[i]);
+                if (a1 < b1)    // a.hand.Get(aHand[i]) < b.hand.Get(bHand[i])
+                {
+                    return true;
+                }
+                else if (b1 < a1)
+                {
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
+        public static bool operator <(Player a, Player b)
+        {
+            return !(a > b && a == b);
+        }
+        #endregion
+
+        /*
+        #region HandEval
+        public int HasStraighFlush()
+        {
+            if (HasFlush() && HasStraight() > 0)
+            {
+                return hand[0].Rank;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public int HasQuads()
+        {
+            for (int i = 0; i < hand.Length - 3; i++ )
+            {
+                if (hand[i] == hand[i+3])
+                {
+                    return hand[i].Rank;
+                }
+            }
+            return 0;
+        }
+
+        public bool HasFlush()
+        {
+            for (int i = 0; i < hand.Length - 1; i++)
+            {
+                if (hand[i].Suit != hand[i + 1].Suit)
                 {
                     return false;
                 }
@@ -84,16 +157,58 @@ namespace PokerBot
             return true;
         }
 
-        public static bool operator <(Player a, Player b)
+        public int HasStraight()
         {
-            return !(a > b && a == b);
+            for (int i = 0; i < hand.Length - 1; i++)
+            {
+                if (hand[i].Rank != hand[i + 1].Rank - 1)
+                {
+                    return 0;
+                }
+            }
+            return hand[0].Rank;
         }
+
+        public int HasTrips()
+        {
+            if (HasQuads() > 0)
+            {
+                return 0;
+            }
+            for (int i = 0; i < hand.Length - 2; i++ )
+            {
+                if (hand[i] == hand[i+2])
+                {
+                    return hand[i].Rank;
+                }
+            }
+            return 0;
+        }
+
+        public int HasPair()
+        {
+            if (HasTrips() > 0)
+            {
+                return 0;
+            }
+            for (int i = 0; i < hand.Length - 1;  i++ )
+            {
+                if (hand[i] == hand[i + 1])
+                {
+                    return hand[i].Rank;
+                }
+            }
+            return 0;
+        }
+        #endregion
+         * */
+
 
         public void DisplayHand()
         {
-            foreach (Card c in hand)
+            for (int i = 0; i < 5; i++)
             {
-                Console.Write(c.ToString() + " ");
+                Console.Write(hand.Get(i).ToString() + " ");  
             }
             Console.WriteLine();
         }

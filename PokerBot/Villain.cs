@@ -24,13 +24,13 @@ namespace PokerBot
             int minRank = 9;
             SortHand();
 
-            for (int i = 0; i < hand.Length; i++)
+            for (int i = 0; i < hand.Size; i++)
             {
-                if (hand[i].Rank > minRank)
+                if (hand.Get(i).Rank > minRank)
                 {
                     disc.Add(i);
                 }
-                else if (i > 0 && hand[i] == hand[i-1])
+                else if (i > 0 && hand.Get(i) == hand.Get(i-1))
                 {
                     disc.Add(i);
                 }

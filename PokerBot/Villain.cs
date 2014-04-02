@@ -39,5 +39,27 @@ namespace PokerBot
             discards = disc.ToArray();
             return discards;
         }
+
+        public override bool Action(int pot, int draw, int pos)
+        {
+            if ((pot / 2) == ContribToPot && pos == 0)
+            {
+                Console.WriteLine("Check");
+                return false;
+            }
+            if ((pot / 2) == ContribToPot && pos == 1)
+            {
+                Console.WriteLine("Check");
+                return true;
+            }
+            if ((pot / 2) != ContribToPot && draw == 0)
+            {
+                ContribToPot += (pot - ContribToPot) - ContribToPot;    //Add the difference to ContribToPot
+                Console.WriteLine("Call");
+                return false;
+            }
+            
+            return false;
+        }
     }
 }

@@ -13,6 +13,9 @@ namespace PokerBot
         static Player villain;
         static int dealer;
         static int curPlay;
+        static int pot;
+        static int smallBet;
+        static bool actionComplete;
 
         static void initialise()
         {
@@ -26,6 +29,8 @@ namespace PokerBot
 
             dealer = 0;
             curPlay = dealer;
+            pot = 0;
+            smallBet = 2;
         }
 
         static int NextPlayer(int player)
@@ -55,9 +60,21 @@ namespace PokerBot
             {
                 Console.Clear();
                 deck.Shuffle();
+
+                pot += players[dealer].PostBlind(smallBet / 2);
+                curPlay = NextPlayer(dealer);
+                pot += players[curPlay].PostBlind(smallBet);
+
                 deck.Burn();
                 deck.Deal(players, dealer);
                 hero.DisplayHand();
+
+//                 while (!actionComplete)
+//                 {
+//                     players[dealer].Action(pot, 0, 0);
+//                     players[curPlay].Action(pot, 0, 1);
+//                 }
+                
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -78,7 +95,21 @@ namespace PokerBot
                         }
                         curPlay = NextPlayer(curPlay);
                     }
-                    
+
+                    curPlay = NextPlayer(dealer);
+// 
+//                     while (!actionComplete)
+//                     {
+//                         for (int j = 0; j < players.Length; j++)
+//                         {
+//                             actionComplete = players[curPlay].Action(pot, i + 1, j);
+//                             curPlay = NextPlayer(curPlay);
+//                             if (actionComplete)
+//                             {
+//                                 break;
+//                             }
+                       //  }
+                    //}
                     
                     hero.DisplayHand();
                 }

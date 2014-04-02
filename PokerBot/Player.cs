@@ -15,11 +15,28 @@ namespace PokerBot
             set { name = value; }
         }
 
+        private int chipStack;
+
+        public int ChipStack
+        {
+            get { return chipStack; }
+            set { chipStack = value; }
+        }
+
+        private int contribToPot;
+
+        public int ContribToPot
+        {
+            get { return contribToPot; }
+            set { contribToPot = value; }
+        }
+
         protected Hand hand;  //Hand hand
 
         public Player()
         {
             hand = new Hand(); //new Hand;
+            chipStack = 100;
         }
 
         public void SetCard(Card c, int cardNum)
@@ -57,6 +74,14 @@ namespace PokerBot
                 }
                 hand.Set(cur, j);
             }
+        }
+
+        public abstract bool Action(int pot, int draw, int pos);
+
+        public int PostBlind(int blind)
+        {
+            chipStack -= blind;
+            return blind;
         }
 
 

@@ -36,6 +36,11 @@ namespace PokerBot
 
             return discards;
         }
+
+        public override bool Action(int pot, int draw, int pos)
+        {
+            return false;
+        }
         
     }
 }

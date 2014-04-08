@@ -12,11 +12,6 @@ namespace PokerBot
             base.Name = "Villain";
         }
 
-        public void Draw()
-        {
-
-        }
-
         public override int[] GetDiscards()
         {
             int[] discards = null;
@@ -40,26 +35,49 @@ namespace PokerBot
             return discards;
         }
 
-        public override bool Action(int pot, int draw, int pos)
+        public override int Action(int pot, int bet, int toCall)
         {
-            if ((pot / 2) == ContribToPot && pos == 0)
+            List<string> options = new List<string>();
+            ActedThisRound = true;
+
+            if ((ContribToPot * 2) == pot)
             {
-                Console.WriteLine("Check");
-                return false;
+                options.Add("check");
+                options.Add("bet");
             }
-            if ((pot / 2) == ContribToPot && pos == 1)
+            else if ((ContribToPot * 2) < pot)
             {
-                Console.WriteLine("Check");
-                return true;
+                options.Add("call");
+                options.Add("raise");
+                options.Add("fold");
             }
-            if ((pot / 2) != ContribToPot && draw == 0)
+
+            Random r = new Random();
+            int rand = r.Next(2);
+
+            string s = options[rand];
+
+            switch (s)
             {
-                ContribToPot += (pot - ContribToPot) - ContribToPot;    //Add the difference to ContribToPot
-                Console.WriteLine("Call");
-                return false;
+                case "check":
+                    return Check();
+
+                case "call":
+                    return Call(toCall);
+
+                case "bet":
+                    return Bet(bet);
+
+                case "raise":
+                    return Raise(bet);
+
+                case "fold":
+                    return Fold();
+
+                default:
+                    return 0;
             }
             
-            return false;
         }
     }
 }

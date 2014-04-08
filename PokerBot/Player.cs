@@ -31,12 +31,21 @@ namespace PokerBot
             set { contribToPot = value; }
         }
 
+        private bool actedThisRound;
+
+        public bool ActedThisRound
+        {
+            get { return actedThisRound; }
+            set { actedThisRound = value; }
+        }
+
         protected Hand hand;  //Hand hand
 
         public Player()
         {
             hand = new Hand(); //new Hand;
             chipStack = 100;
+            actedThisRound = false;
         }
 
         public void SetCard(Card c, int cardNum)
@@ -76,14 +85,51 @@ namespace PokerBot
             }
         }
 
-        public abstract bool Action(int pot, int draw, int pos);
+        public abstract int Action(int pot, int bet, int toCall);
 
         public int PostBlind(int blind)
         {
             chipStack -= blind;
+            contribToPot += blind;
             return blind;
         }
 
+        public int Check()
+        {
+            Console.WriteLine("Check");
+            return 0;
+        }
+
+        public int Call(int toCall)
+        {
+            Console.WriteLine("Call");
+            ChipStack -= toCall;
+            ContribToPot += toCall;
+            return toCall;
+        }
+
+        public int Bet(int bet)
+        {
+            Console.WriteLine("Bet");
+            ChipStack -= bet;
+            ContribToPot += bet;
+            return bet;
+        }
+
+        public int Raise(int bet)
+        {
+            Console.WriteLine("Raise");
+            int total = 0;
+            total += Call(bet);
+            total += Bet(bet);
+            return total;
+        }
+
+        public int Fold()
+        {
+            Console.WriteLine("Fold");
+            return 0;
+        }
 
         #region Operators
         public static bool operator ==(Player a, Player b)

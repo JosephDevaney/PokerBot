@@ -19,7 +19,7 @@ namespace PokerBot
             int[] discards;
 
             cardsToDiscard = Console.ReadLine();
-            if (cardsToDiscard == "pat")
+            if (cardsToDiscard == "pat" || cardsToDiscard == "")
             {
                 discards = null;
             }
@@ -37,9 +37,62 @@ namespace PokerBot
             return discards;
         }
 
-        public override bool Action(int pot, int draw, int pos)
+        public override int Action(int pot, int bet, int toCall)
         {
-            return false;
+            List<string> options = new List<string>();
+            string input = "";
+            ActedThisRound = true;
+
+            if ((ContribToPot * 2) == pot)
+            {
+                options.Add("check");
+                options.Add("bet");
+            }
+            else if ((ContribToPot * 2) < pot)
+            {
+                options.Add("fold");
+                options.Add("call");
+                options.Add("raise");
+            }
+
+
+            while (options.Contains(input) == false)
+            {
+                Console.Write("Action:");
+                foreach (string s in options)
+                {
+                    Console.Write("\t" + s);
+                }
+                Console.WriteLine();
+                input = Console.ReadLine().ToLower();
+
+                if (options.Contains(input) == false)
+                {
+                    Console.WriteLine("Input Error");
+                }
+            }
+
+            switch (input)
+            {
+                case "check":
+                    return Check();
+
+                case "call":
+                    return Call(toCall);
+
+                case "bet":
+                    return Bet(bet);
+
+                case "raise":
+                    return Raise(bet);
+
+                case "fold":
+                    return Fold();
+                
+                default:
+                    return 0;
+            }
+            
         }
         
     }

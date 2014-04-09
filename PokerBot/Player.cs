@@ -31,6 +31,14 @@ namespace PokerBot
             set { contribToPot = value; }
         }
 
+        private int numBets;
+
+        public int NumBets
+        {
+            get { return numBets; }
+            set { numBets = value; }
+        }
+
         private bool actedThisRound;
 
         public bool ActedThisRound
@@ -85,7 +93,7 @@ namespace PokerBot
             }
         }
 
-        public abstract int Action(int pot, int bet, int toCall);
+        public abstract int Action(int pot, int bet, int toCall, int totalBets);
 
         public int PostBlind(int blind)
         {
@@ -96,13 +104,11 @@ namespace PokerBot
 
         public int Check()
         {
-            Console.WriteLine("Check");
             return 0;
         }
 
         public int Call(int toCall)
         {
-            Console.WriteLine("Call");
             ChipStack -= toCall;
             ContribToPot += toCall;
             return toCall;
@@ -110,25 +116,53 @@ namespace PokerBot
 
         public int Bet(int bet)
         {
-            Console.WriteLine("Bet");
             ChipStack -= bet;
             ContribToPot += bet;
+            NumBets++;
             return bet;
         }
 
-        public int Raise(int bet)
+        public int Raise(int bet, int toCall)
         {
-            Console.WriteLine("Raise");
             int total = 0;
-            total += Call(bet);
+            total += Call(toCall);
             total += Bet(bet);
+            //NumBets++;
             return total;
         }
 
         public int Fold()
         {
-            Console.WriteLine("Fold");
-            return 0;
+            return -1;
+        }
+
+        public int MakeAction(string s, int bet, int toCall)
+        {
+            switch (s)
+            {
+                case "check":
+                    Console.WriteLine("Check");
+                    return Check();
+
+                case "call":
+                    Console.WriteLine("Call");
+                    return Call(toCall);
+
+                case "bet":
+                    Console.WriteLine("Bet");
+                    return Bet(bet);
+
+                case "raise":
+                    Console.WriteLine("Raise");
+                    return Raise(bet, toCall);
+
+                case "fold":
+                    Console.WriteLine("Fold");
+                    return Fold();
+
+                default:
+                    return 0;
+            }
         }
 
         #region Operators

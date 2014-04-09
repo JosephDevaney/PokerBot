@@ -15,8 +15,7 @@ namespace PokerBot
         public int curPlay;
         public int pot;
         public int smallBet;
-        private int bettingRound;
-        //public bool allActedThisRound;
+        private int betsThisRound;
 
         public Table()
         {
@@ -32,8 +31,7 @@ namespace PokerBot
             curPlay = dealer;
             pot = 0;
             smallBet = 2;
-            bettingRound = 0;
-            //allActedThisRound = false;
+            betsThisRound = 0;
         }
 
         public int NextPlayer(int player)
@@ -87,33 +85,71 @@ namespace PokerBot
             {
                 p.ContribToPot = 0;
                 p.ActedThisRound = false;
+                p.NumBets = 0;
             }
             pot = 0;
+        }
+
+        public void WinByDefault(int cur)
+        {
+            cur = NextPlayer(cur);
+            Console.WriteLine(players[cur] + " wins");
+            players[cur].ChipStack += pot;
+
+            Console.WriteLine("\nPress any key to continue!");
+            Console.ReadKey();
+
+            ResetHand();
+
+            dealer = NextPlayer(dealer);
+        }
+
+        public void ShowPlayer(Player p)
+        {
+            Console.WriteLine(p + ": " + p.ChipStack);
         }
 
         public void Play()
         {
             int[] discards;
             int bet;
+            int actionResult = 0;
 
             while (true)
             {
                 Console.Clear();
+                foreach (Player p in players)
+                {
+                    ShowPlayer(p);
+                }
                 deck.Shuffle();
 
                 pot = players[dealer].PostBlind(smallBet / 2);
                 curPlay = NextPlayer(dealer);
                 pot += players[curPlay].PostBlind(smallBet);
+                players[curPlay].NumBets++;
 
                 deck.Burn();
                 deck.Deal(players, dealer);
                 hero.DisplayHand();
 
                 curPlay = dealer;
+                betsThisRound = 0;
                 while (!ActionComplete())
                 {
-                    pot += players[curPlay].Action(pot, smallBet, Math.Abs(hero.ContribToPot - villain.ContribToPot));
+                    actionResult = players[curPlay].Action(pot, smallBet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
+                    if (actionResult == -1)
+                    {
+                        WinByDefault(curPlay);
+                        break;
+                    }
+                    pot += actionResult;
+                    betsThisRound = hero.NumBets + villain.NumBets;
                     curPlay = NextPlayer(curPlay);
+                }
+                if (actionResult == -1)
+                {
+                    continue;
                 }
 
 
@@ -152,14 +188,30 @@ namespace PokerBot
                     foreach (Player p in players)
                     {
                         p.ActedThisRound = false;
+                        p.NumBets = 0;
                     }
+                    betsThisRound = 0;
                     while (!ActionComplete())
                     {
-                        pot += players[curPlay].Action(pot, bet, Math.Abs(hero.ContribToPot - villain.ContribToPot));
+                        actionResult = players[curPlay].Action(pot, smallBet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
+                        if (actionResult == -1)
+                        {
+                            WinByDefault(curPlay);
+                            break;
+                        }
+                        pot += actionResult;
+                        betsThisRound = hero.NumBets + villain.NumBets;
                         curPlay = NextPlayer(curPlay);
                     }
+                    if (actionResult == -1)
+                    {
+                        break;
+                    } 
+                }
 
-                    
+                if (actionResult == -1)
+                {
+                    continue;
                 }
 
                 hero.SortHand();

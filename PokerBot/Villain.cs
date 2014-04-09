@@ -35,7 +35,7 @@ namespace PokerBot
             return discards;
         }
 
-        public override int Action(int pot, int bet, int toCall)
+        public override int Action(int pot, int bet, int toCall, int totalBets)
         {
             List<string> options = new List<string>();
             ActedThisRound = true;
@@ -48,35 +48,19 @@ namespace PokerBot
             else if ((ContribToPot * 2) < pot)
             {
                 options.Add("call");
-                options.Add("raise");
-                options.Add("fold");
+                if (totalBets < 4)
+                {
+                    options.Add("raise");
+                }
+                
             }
 
             Random r = new Random();
-            int rand = r.Next(2);
+            int rand = r.Next(options.Count);
 
             string s = options[rand];
 
-            switch (s)
-            {
-                case "check":
-                    return Check();
-
-                case "call":
-                    return Call(toCall);
-
-                case "bet":
-                    return Bet(bet);
-
-                case "raise":
-                    return Raise(bet);
-
-                case "fold":
-                    return Fold();
-
-                default:
-                    return 0;
-            }
+            return MakeAction(s, bet, toCall);
             
         }
     }

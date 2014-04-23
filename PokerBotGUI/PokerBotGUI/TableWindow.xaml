@@ -1,0 +1,74 @@
+﻿<Window x:Class="PokerBotGUI.TableWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TableWindow" Height="500" Width="600">
+    <Window.Resources>
+        <Style x:Key="MyBtnStyle" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid x:Name="Chrome" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#ADADAD"/>
+                                <Setter Property="Opacity" TargetName="Chrome" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Image Stretch="Fill" Source="/PokerBotGUI;component/Images/fg2.bmp"></Image>
+        <Button Content="Fold" Height="39" HorizontalAlignment="Right" Margin="0,0,173,20" Name="button1" VerticalAlignment="Bottom" Width="75" Click="fold_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}" ClickMode="Press"></Button>
+        <Button Content="Call" Height="39" HorizontalAlignment="Right" Margin="0,0,95,20" Name="button2" VerticalAlignment="Bottom" Width="75" Click="call_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+        <Button Content="Raise" Height="39" HorizontalAlignment="Right" Margin="0,0,12,20" Name="button3" VerticalAlignment="Bottom" Width="81" Click="raise_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+
+        <Button Content="Check" Height="39" HorizontalAlignment="Right" Margin="0,0,173,65" Name="checkBtn" VerticalAlignment="Bottom" Width="75" Click="check_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}" ClickMode="Press"></Button>
+        <Button Content="Bet" Height="39" HorizontalAlignment="Right" Margin="0,0,95,65" Name="betBtn" VerticalAlignment="Bottom" Width="75" Click="bet_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+        <Button Content="Discard" Height="39" HorizontalAlignment="Right" Margin="0,0,12,65" Name="discardBtn" VerticalAlignment="Bottom" Width="81" Click="discard_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+
+        <TextBlock Height="23" HorizontalAlignment="Right" Margin="0,0,292,259" Name="textBlock2" Text="{Binding Pot}" VerticalAlignment="Bottom"  />
+        <TextBlock Height="23" HorizontalAlignment="Right" Margin="0,0,300,259" Name="textBlock1" Text="Pot: " VerticalAlignment="Bottom" />
+
+
+        <Button Content="Start" Height="23" HorizontalAlignment="Left" Margin="6,6,0,0" Name="button4" VerticalAlignment="Top" Width="75" Click="button4_Click" />
+        <Button Style="{DynamicResource MyBtnStyle}" Height="70" HorizontalAlignment="Left" Margin="185,271,0,0" Name="card0" VerticalAlignment="Top" Width="62" Click="card0_Click" >
+            <Image Source="{Binding Path=hero.Card0.Image.Image}" Opacity="1" Stretch="Fill" />
+        </Button>
+        <Button Style="{DynamicResource MyBtnStyle}" Height="70" HorizontalAlignment="Left" Margin="215,271,0,0" Name="card1" VerticalAlignment="Top" Width="62" Click="card1_Click" >
+            <Image Source="{Binding Path=hero.Card1.Image.Image}" Opacity="1" />
+        </Button>
+        <Button Style="{DynamicResource MyBtnStyle}" Height="70" HorizontalAlignment="Left" Margin="245,271,0,0" Name="card2" VerticalAlignment="Top" Width="62" Click="card2_Click" >
+            <Image Source="{Binding Path=hero.Card2.Image.Image}" Opacity="1" />
+        </Button>
+        <Button Style="{DynamicResource MyBtnStyle}" Height="70" HorizontalAlignment="Left" Margin="275,271,0,0" Name="card3" VerticalAlignment="Top" Width="62" Click="card3_Click" >
+            <Image Source="{Binding Path=hero.Card3.Image.Image}" Opacity="1" />
+        </Button>
+        <Button Style="{DynamicResource MyBtnStyle}" Height="70" HorizontalAlignment="Left" Margin="305,271,0,0" Name="card4" VerticalAlignment="Top" Width="62" Click="card4_Click" >
+            <Image Source="{Binding Path=hero.Card4.Image.Image}" Opacity="1" />
+        </Button>
+        <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,362,0,0" Name="heroStack" Text="{Binding hero.ChipStack}" VerticalAlignment="Top" Width="71" Background="#FFBD2222" />
+        <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,343,0,0" Name="heroName" Text="{Binding hero.Name}" VerticalAlignment="Top" Background="#FFBD2222" Width="71" />
+
+        <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,37,0,0" Name="villainStack" Text="{Binding villain.ChipStack}" VerticalAlignment="Top" Width="71" Background="#FFBD2222" />
+        <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,18,0,0" Name="villainName" Text="{Binding villain.Name}" VerticalAlignment="Top" Background="#FFBD2222" Width="71" />
+
+        <Image Source="{Binding villain.Card0.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="225,64,0,0" Name="vCard0" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card1.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="245,64,0,0" Name="vCard1" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card2.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="265,64,0,0" Name="vCard2" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card3.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="285,64,0,0" Name="vCard3" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card4.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="305,64,0,0" Name="vCard4" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+
+    </Grid>
+</Window>

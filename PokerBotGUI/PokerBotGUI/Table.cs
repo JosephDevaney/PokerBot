@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Threading;
 
 namespace PokerBotGUI
 {
@@ -132,6 +133,7 @@ namespace PokerBotGUI
 
         public void ResetHand()
         {
+            villain.ShowHand = false;
             foreach (Player p in players)
             {
                 p.ContribToPot = 0;
@@ -179,6 +181,12 @@ namespace PokerBotGUI
                 Pot += players[curPlay].PostBlind(smallBet);
                 players[curPlay].NumBets++;
 
+                if (Object.ReferenceEquals(players[curPlay], villain))
+                {
+                    villain.VillainAction = "Posts Small Blind";
+                    villain.ShowAction = true;
+                }
+
                 deck.Burn();
                 deck.Deal(players, dealer/*, hero, villain*/);
                 /*hero.DisplayHand();*/
@@ -213,6 +221,10 @@ namespace PokerBotGUI
                         if (discards != null)
                         {
                             players[curPlay].Discard(discards);
+                            if (Object.ReferenceEquals(players[curPlay], villain))
+                            {
+                                villain.VillainAction = "Discards " + discards.Length + " cards";
+                            }
 //                             if (Object.ReferenceEquals(players[curPlay], hero))
 //                             {
 //                                 deck.DealDiscards(hero, discards);
@@ -224,8 +236,12 @@ namespace PokerBotGUI
                             deck.DealDiscards(players[curPlay], discards);
                             /*Console.WriteLine(players[curPlay].Name + " draws " + discards.Length + " cards.");*/
                         }
-                        else
+                        else 
                         {
+                            if (Object.ReferenceEquals(players[curPlay], villain))
+                            {
+                                villain.VillainAction = "Stands Pat";
+                            }
                             /*Console.WriteLine(players[curPlay].Name + " stands pat.");*/
                         }
                         curPlay = NextPlayer(curPlay);
@@ -251,7 +267,7 @@ namespace PokerBotGUI
                     betsThisRound = 0;
                     while (!ActionComplete())
                     {
-                        actionResult = players[curPlay].Action(pot, smallBet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
+                        actionResult = players[curPlay].Action(pot, bet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
                         if (actionResult == -1)
                         {
                             WinByDefault(curPlay);
@@ -277,6 +293,7 @@ namespace PokerBotGUI
 //                 hero.DisplayHand();
 
                 villain.SortHand();
+                villain.ShowHand = true;
 //                 Console.Write("Villain: ");
 //                 villain.DisplayHand();
 
@@ -295,6 +312,7 @@ namespace PokerBotGUI
 //                 Console.WriteLine("\nPress any key to continue!");
 //                 Console.ReadKey();
 
+                Thread.Sleep(10000);
                 ResetHand();
 
                 dealer = NextPlayer(dealer);

@@ -13,6 +13,15 @@ namespace PokerBotGUI
             base.Name = "Hero";
             base.input = "";
             cardsToDiscard = "";
+            TurnBtnsOff();
+        }
+
+        public void TurnBtnsOff()
+        {
+            FoldCall = false;
+            RaiseBtn = false;
+            CheckBet = false;
+            DiscardBtn = false;
         }
 
         public override int[] GetDiscards()
@@ -21,11 +30,13 @@ namespace PokerBotGUI
             string[] cards;
             int[] discards;
 
+            DiscardBtn = true;
+
             while (cardsToDiscard == "")
             {
                 Yield(100);
             }
-
+            DiscardBtn = false;
             /*cardsToDiscard = Console.ReadLine();*/
             if (cardsToDiscard == "pat")
             {
@@ -56,6 +67,7 @@ namespace PokerBotGUI
             {
                 options.Add("check");
                 options.Add("bet");
+                CheckBet = true;
             }
             else if ((ContribToPot * 2) < pot)
             {
@@ -64,7 +76,9 @@ namespace PokerBotGUI
                 if (totalBets < 4)
                 {
                     options.Add("raise");
+                    RaiseBtn = true;
                 }
+                FoldCall = true;
             }
 
 
@@ -85,8 +99,8 @@ namespace PokerBotGUI
                 Yield(100);
             }
 
+            TurnBtnsOff();
             return MakeAction(input, bet, toCall);
-
         }
 
         private void Yield(long ticks)

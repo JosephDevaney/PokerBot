@@ -26,17 +26,18 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </Window.Resources>
 
     <Grid>
         <Image Stretch="Fill" Source="/PokerBotGUI;component/Images/fg2.bmp"></Image>
-        <Button Content="Fold" Height="39" HorizontalAlignment="Right" Margin="0,0,173,20" Name="button1" VerticalAlignment="Bottom" Width="75" Click="fold_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}" ClickMode="Press"></Button>
-        <Button Content="Call" Height="39" HorizontalAlignment="Right" Margin="0,0,95,20" Name="button2" VerticalAlignment="Bottom" Width="75" Click="call_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
-        <Button Content="Raise" Height="39" HorizontalAlignment="Right" Margin="0,0,12,20" Name="button3" VerticalAlignment="Bottom" Width="81" Click="raise_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+        <Button Content="Fold" Height="39" HorizontalAlignment="Right" Margin="0,0,173,20" Name="button1" VerticalAlignment="Bottom" Width="75" Click="fold_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.FoldCall, Converter={StaticResource BoolToVis}}" ClickMode="Press"></Button>
+        <Button Content="Call" Height="39" HorizontalAlignment="Right" Margin="0,0,95,20" Name="button2" VerticalAlignment="Bottom" Width="75" Click="call_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.FoldCall, Converter={StaticResource BoolToVis}}" ></Button>
+        <Button Content="Raise" Height="39" HorizontalAlignment="Right" Margin="0,0,12,20" Name="button3" VerticalAlignment="Bottom" Width="81" Click="raise_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.RaiseBtn, Converter={StaticResource BoolToVis}}" ></Button>
 
-        <Button Content="Check" Height="39" HorizontalAlignment="Right" Margin="0,0,173,65" Name="checkBtn" VerticalAlignment="Bottom" Width="75" Click="check_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}" ClickMode="Press"></Button>
-        <Button Content="Bet" Height="39" HorizontalAlignment="Right" Margin="0,0,95,65" Name="betBtn" VerticalAlignment="Bottom" Width="75" Click="bet_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
-        <Button Content="Discard" Height="39" HorizontalAlignment="Right" Margin="0,0,12,65" Name="discardBtn" VerticalAlignment="Bottom" Width="81" Click="discard_button" MinHeight="5" MaxHeight="50" DataContext="{Binding}"></Button>
+        <Button Content="Check" Height="39" HorizontalAlignment="Right" Margin="0,0,173,65" Name="checkBtn" VerticalAlignment="Bottom" Width="75" Click="check_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.CheckBet, Converter={StaticResource BoolToVis}}" ClickMode="Press"></Button>
+        <Button Content="Bet" Height="39" HorizontalAlignment="Right" Margin="0,0,95,65" Name="betBtn" VerticalAlignment="Bottom" Width="75" Click="bet_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.CheckBet, Converter={StaticResource BoolToVis}}" ></Button>
+        <Button Content="Discard" Height="39" HorizontalAlignment="Right" Margin="0,0,12,65" Name="discardBtn" VerticalAlignment="Bottom" Width="81" Click="discard_button" MinHeight="5" MaxHeight="50" Visibility="{Binding hero.DiscardBtn, Converter={StaticResource BoolToVis}}" ></Button>
 
         <TextBlock Height="23" HorizontalAlignment="Right" Margin="0,0,292,259" Name="textBlock2" Text="{Binding Pot}" VerticalAlignment="Bottom"  />
         <TextBlock Height="23" HorizontalAlignment="Right" Margin="0,0,300,259" Name="textBlock1" Text="Pot: " VerticalAlignment="Bottom" />
@@ -64,11 +65,11 @@
         <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,37,0,0" Name="villainStack" Text="{Binding villain.ChipStack}" VerticalAlignment="Top" Width="71" Background="#FFBD2222" />
         <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,18,0,0" Name="villainName" Text="{Binding villain.Name}" VerticalAlignment="Top" Background="#FFBD2222" Width="71" />
 
-        <Image Source="{Binding villain.Card0.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="225,64,0,0" Name="vCard0" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-        <Image Source="{Binding villain.Card1.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="245,64,0,0" Name="vCard1" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-        <Image Source="{Binding villain.Card2.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="265,64,0,0" Name="vCard2" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-        <Image Source="{Binding villain.Card3.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="285,64,0,0" Name="vCard3" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-        <Image Source="{Binding villain.Card4.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="305,64,0,0" Name="vCard4" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-
+        <Image Source="{Binding villain.Card0.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="225,64,0,0" Name="vCard0" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card1.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="245,64,0,0" Name="vCard1" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card2.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="265,64,0,0" Name="vCard2" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card3.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="285,64,0,0" Name="vCard3" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding villain.Card4.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="305,64,0,0" Name="vCard4" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <TextBlock Height="20" HorizontalAlignment="Left" Margin="345,23,0,0" Name="textBlock3" Text="{Binding villain.VillainAction}" Visibility="{Binding villain.ShowAction, Converter={StaticResource BoolToVis}}" TextAlignment="Center"  VerticalAlignment="Top" Background="#FFBD2222"  Width="93" />
     </Grid>
 </Window>

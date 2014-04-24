@@ -52,6 +52,14 @@ namespace PokerBotGUI
             set { actedThisRound = value; }
         }
 
+        private string villainAction;
+
+        public string VillainAction
+        {
+            get { return villainAction; }
+            set { villainAction = value; OnPropertyChanged("VillainAction"); }
+        }
+
         public Hand hand;  //Hand hand
 
         #region Card Properties
@@ -94,6 +102,60 @@ namespace PokerBotGUI
             get { return card4; }
             set { card4 = value; OnPropertyChanged("Card4"); }
         }
+        #endregion
+
+        #region Hero Display Switches
+        private bool foldCall;
+
+        public bool FoldCall
+        {
+            get { return foldCall; }
+            set { foldCall = value; OnPropertyChanged("FoldCall"); }
+        }
+
+        private bool raiseBtn;
+
+        public bool RaiseBtn
+        {
+            get { return raiseBtn; }
+            set { raiseBtn = value; OnPropertyChanged("RaiseBtn"); }
+        }
+
+        private bool checkBet;
+
+        public bool CheckBet
+        {
+            get { return checkBet; }
+            set { checkBet = value; OnPropertyChanged("CheckBet"); }
+        }
+
+        private bool discardBtn;
+
+        public bool DiscardBtn
+        {
+            get { return discardBtn; }
+            set { discardBtn = value; OnPropertyChanged("DiscardBtn"); }
+        }
+        #endregion
+
+        #region Villain Display Switches
+
+        private bool showHand;
+
+        public bool ShowHand
+        {
+            get { return showHand; }
+            set { showHand = value; OnPropertyChanged("ShowHand"); }
+        }
+
+        private bool showAction;
+
+        public bool ShowAction
+        {
+            get { return showAction; }
+            set { showAction = value; OnPropertyChanged("ShowAction"); }
+        }
+
         #endregion
 
         public Player()

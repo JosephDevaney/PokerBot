@@ -10,6 +10,9 @@ namespace PokerBotGUI
         public Villain()
         {
             base.Name = "Villain";
+            VillainAction = "";
+            ShowAction = false;
+            ShowHand = false;
         }
 
         public override int[] GetDiscards()
@@ -42,15 +45,15 @@ namespace PokerBotGUI
 
             if ((ContribToPot * 2) == pot)
             {
-                options.Add("check");
-                options.Add("bet");
+                options.Add("Check");
+                options.Add("Bet");
             }
             else if ((ContribToPot * 2) < pot)
             {
-                options.Add("call");
+                options.Add("Call");
                 if (totalBets < 4)
                 {
-                    options.Add("raise");
+                    options.Add("Raise");
                 }
 
             }
@@ -59,6 +62,9 @@ namespace PokerBotGUI
             int rand = r.Next(options.Count);
 
             string s = options[rand];
+
+            VillainAction = String.Copy(s);
+            s = s.ToLower();
 
             return MakeAction(s, bet, toCall);
 

@@ -65,11 +65,18 @@
         <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,37,0,0" Name="villainStack" Text="{Binding villain.ChipStack}" VerticalAlignment="Top" Width="71" Background="#FFBD2222" />
         <TextBlock Height="21" HorizontalAlignment="Left" TextAlignment="Center" Margin="245,18,0,0" Name="villainName" Text="{Binding villain.Name}" VerticalAlignment="Top" Background="#FFBD2222" Width="71" />
 
+        <TextBlock Height="20" HorizontalAlignment="Left" Margin="345,23,0,0" Name="textBlock3" Text="{Binding villain.VillainAction}" Visibility="{Binding villain.ShowAction, Converter={StaticResource BoolToVis}}" TextAlignment="Center"  VerticalAlignment="Top" Background="#FFBD2222"  Width="93" />
+        <Image Source="{Binding deck.DeckBack.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="225,64,0,0" Name="back0" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding deck.DeckBack.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="245,64,0,0" Name="back1" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding deck.DeckBack.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="265,64,0,0" Name="back2" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding deck.DeckBack.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="285,64,0,0" Name="back3" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <Image Source="{Binding deck.DeckBack.Image.Image}" Height="50" HorizontalAlignment="Left" Margin="305,64,0,0" Name="back4" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+
         <Image Source="{Binding villain.Card0.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="225,64,0,0" Name="vCard0" Stretch="Fill" VerticalAlignment="Top" Width="40" />
         <Image Source="{Binding villain.Card1.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="245,64,0,0" Name="vCard1" Stretch="Fill" VerticalAlignment="Top" Width="40" />
         <Image Source="{Binding villain.Card2.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="265,64,0,0" Name="vCard2" Stretch="Fill" VerticalAlignment="Top" Width="40" />
         <Image Source="{Binding villain.Card3.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="285,64,0,0" Name="vCard3" Stretch="Fill" VerticalAlignment="Top" Width="40" />
         <Image Source="{Binding villain.Card4.Image.Image}" Visibility="{Binding villain.ShowHand, Converter={StaticResource BoolToVis}}" Height="50" HorizontalAlignment="Left" Margin="305,64,0,0" Name="vCard4" Stretch="Fill" VerticalAlignment="Top" Width="40" />
-        <TextBlock Height="20" HorizontalAlignment="Left" Margin="345,23,0,0" Name="textBlock3" Text="{Binding villain.VillainAction}" Visibility="{Binding villain.ShowAction, Converter={StaticResource BoolToVis}}" TextAlignment="Center"  VerticalAlignment="Top" Background="#FFBD2222"  Width="93" />
+
     </Grid>
 </Window>

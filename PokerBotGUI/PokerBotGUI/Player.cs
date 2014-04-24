@@ -233,10 +233,10 @@ namespace PokerBotGUI
 
                 while (j > 0 && (hand.Get(j - 1) < cur))    //&& hand.Get(j-1) < cur
                 {
-                    hand.Set(hand.Get(j - 1), j);
+                    SetCard(hand.Get(j - 1), j);
                     j--;
                 }
-                hand.Set(cur, j);
+                SetCard(cur, j);
             }
         }
 

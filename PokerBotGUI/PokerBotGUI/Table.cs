@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace PokerBotGUI
 {
@@ -32,22 +33,6 @@ namespace PokerBotGUI
         public int smallBet;
         private int betsThisRound;
 
-        private string tester;
-
-//         public string Tester
-//         {
-//             get { return tester; }
-//             set
-//             {
-//                 tester = value;
-//                 if (tester.Equals(value) == false)
-//                 {
-//                     tester = value;
-//                     OnPropertyChanged("Tester");
-//                 }
-//             }
-//         }
-
         public Table()
         {
             players = new Player[2];
@@ -64,11 +49,11 @@ namespace PokerBotGUI
             smallBet = 2;
             betsThisRound = 0;
 
-            villain.Card0 = deck.DeckBack;
-            villain.Card1 = deck.DeckBack;
-            villain.Card2 = deck.DeckBack;
-            villain.Card3 = deck.DeckBack;
-            villain.Card4 = deck.DeckBack;
+//             villain.Card0 = deck.DeckBack;
+//             villain.Card1 = deck.DeckBack;
+//             villain.Card2 = deck.DeckBack;
+//             villain.Card3 = deck.DeckBack;
+//             villain.Card4 = deck.DeckBack;
 
         }
 
@@ -181,9 +166,14 @@ namespace PokerBotGUI
                 Pot += players[curPlay].PostBlind(smallBet);
                 players[curPlay].NumBets++;
 
-                if (Object.ReferenceEquals(players[curPlay], villain))
+                if (Object.ReferenceEquals(players[dealer], villain))
                 {
                     villain.VillainAction = "Posts Small Blind";
+                    villain.ShowAction = true;
+                }
+                else
+                {
+                    villain.VillainAction = "Posts Big Blind";
                     villain.ShowAction = true;
                 }
 
@@ -312,11 +302,32 @@ namespace PokerBotGUI
 //                 Console.WriteLine("\nPress any key to continue!");
 //                 Console.ReadKey();
 
-                Thread.Sleep(10000);
+                int a = 100;
+                while (a > 0)
+                {
+                    Yield(100000);
+                    a--;
+                }
                 ResetHand();
 
                 dealer = NextPlayer(dealer);
             }
+        }
+
+        private void Yield(long ticks)
+        {
+
+            // Note: a tick is 100 nanoseconds
+
+            long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
+
+            while (DateTime.Now.Ticks < dtEnd)
+            {
+
+                MainWindow.tableWindow.Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate(object unused) { return null; }, null);
+
+            }
+
         }
     }
 }

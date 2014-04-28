@@ -44,6 +44,14 @@ namespace PokerBotGUI
             set { numBets = value; }
         }
 
+        private bool allIn;
+
+        public bool AllIn
+        {
+            get { return allIn; }
+            set { allIn = value; }
+        }
+
         private bool actedThisRound;
 
         public bool ActedThisRound
@@ -163,6 +171,7 @@ namespace PokerBotGUI
             hand = new Hand(); //new Hand;
             chipStack = 100;
             actedThisRound = false;
+            AllIn = false;
 
             Card0 = hand[0];
             Card1 = hand[1];
@@ -244,6 +253,10 @@ namespace PokerBotGUI
 
         public int PostBlind(int blind)
         {
+            if (blind > ChipStack)
+            {
+                blind = ChipStack;
+            }
             ChipStack -= blind;
             ContribToPot += blind;
             return blind;
@@ -287,23 +300,35 @@ namespace PokerBotGUI
             switch (s)
             {
                 case "check":
-                    Console.WriteLine("Check");
+                    //Console.WriteLine("Check");
                     return Check();
 
                 case "call":
-                    Console.WriteLine("Call");
+                    //Console.WriteLine("Call");
+                    if (toCall == ChipStack)
+                    {
+                        AllIn = true;
+                    }
                     return Call(toCall);
 
                 case "bet":
-                    Console.WriteLine("Bet");
+                    //Console.WriteLine("Bet");
+                    if (bet == ChipStack)
+                    {
+                        AllIn = true;
+                    }
                     return Bet(bet);
 
                 case "raise":
-                    Console.WriteLine("Raise");
+                    //Console.WriteLine("Raise");
+                    if ((bet + toCall) == ChipStack)
+                    {
+                        AllIn = true;
+                    }
                     return Raise(bet, toCall);
 
                 case "fold":
-                    Console.WriteLine("Fold");
+                    //Console.WriteLine("Fold");
                     return Fold();
 
                 default:
@@ -369,91 +394,6 @@ namespace PokerBotGUI
             return !(a > b && a == b);
         }
         #endregion
-
-        /*
-        #region HandEval
-        public int HasStraighFlush()
-        {
-            if (HasFlush() && HasStraight() > 0)
-            {
-                return hand[0].Rank;
-            }
-            else
-            {
-                return 0;
-            }
-        }
-
-        public int HasQuads()
-        {
-            for (int i = 0; i < hand.Length - 3; i++ )
-            {
-                if (hand[i] == hand[i+3])
-                {
-                    return hand[i].Rank;
-                }
-            }
-            return 0;
-        }
-
-        public bool HasFlush()
-        {
-            for (int i = 0; i < hand.Length - 1; i++)
-            {
-                if (hand[i].Suit != hand[i + 1].Suit)
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public int HasStraight()
-        {
-            for (int i = 0; i < hand.Length - 1; i++)
-            {
-                if (hand[i].Rank != hand[i + 1].Rank - 1)
-                {
-                    return 0;
-                }
-            }
-            return hand[0].Rank;
-        }
-
-        public int HasTrips()
-        {
-            if (HasQuads() > 0)
-            {
-                return 0;
-            }
-            for (int i = 0; i < hand.Length - 2; i++ )
-            {
-                if (hand[i] == hand[i+2])
-                {
-                    return hand[i].Rank;
-                }
-            }
-            return 0;
-        }
-
-        public int HasPair()
-        {
-            if (HasTrips() > 0)
-            {
-                return 0;
-            }
-            for (int i = 0; i < hand.Length - 1;  i++ )
-            {
-                if (hand[i] == hand[i + 1])
-                {
-                    return hand[i].Rank;
-                }
-            }
-            return 0;
-        }
-        #endregion
-         * */
-
 
         public void DisplayHand()
         {

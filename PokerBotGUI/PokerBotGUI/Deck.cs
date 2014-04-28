@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Media.Imaging;
 using System.ComponentModel;
+using System.IO;
 
 namespace PokerBotGUI
 {
@@ -69,9 +70,10 @@ namespace PokerBotGUI
         public void LoadDeckImages()
         {
             int index = 0;
+            string dir = Path.Combine(Environment.CurrentDirectory, "PlayingCards");
             foreach (string filename in
                 System.IO.Directory.GetFiles
-                ("C:\\Users\\Journeyman\\Documents\\DT2282\\OOP\\Sem2Assignment\\Graphics\\PlayingCards\\PlayingCards")) //Make folder in project for these
+                (dir)) 
             {
                 if (filename.Contains("pokerstars"))
                 {
@@ -79,8 +81,7 @@ namespace PokerBotGUI
                 }
             }
 
-            string backPath = "C:\\Users\\Journeyman\\Documents\\DT2282\\OOP\\Sem2Assignment\\Graphics\\back.jpeg";
-            DeckBack.Image = new MyImage(new BitmapImage(new Uri(backPath)), "back.jpeg");
+            DeckBack.Image = new MyImage(new BitmapImage(new Uri(dir + "\\..\\back.jpeg")), "back.jpeg");
         }
 
         public void DisplayDeck()
@@ -119,14 +120,6 @@ namespace PokerBotGUI
                 {
                     player = NextPlayer(player, players.Length);
                     players[player].SetCard(cards[top--], i);
-//                     if (Object.ReferenceEquals(players[player], hero))
-//                     {
-//                         hero.SetCard(cards[top--], i);
-//                     }
-//                     else
-//                     {
-//                         villain.SetCard(cards[top--], i);
-//                     }
                 }
             }
         }

@@ -92,9 +92,6 @@ namespace PokerBotGUI
             return winner;
         }
 
-        /* Improve for all-in edge case
-         * 
-         * */
         public bool ActionComplete()
         {
             bool allActedThisRound = true;
@@ -128,17 +125,25 @@ namespace PokerBotGUI
                 p.ContribToPot = 0;
                 p.ActedThisRound = false;
                 p.NumBets = 0;
+                if (p.ChipStack > 0)
+                {
+                    p.AllIn = false;
+                }
             }
             Pot = 0;
+        }
+
+        public void RefundDiff(int p, int refund)
+        {
+            p = NextPlayer(p);
+            players[p].ContribToPot -= refund;
+            players[p].ChipStack += refund;
         }
 
         public void WinByDefault(int cur)
         {
             cur = NextPlayer(cur);
-            //Console.WriteLine(players[cur] + " wins");
             players[cur].ChipStack += pot;
-
-            //Console.WriteLine("\nPress any key to continue!");
 
             ResetHand();
 
@@ -158,11 +163,6 @@ namespace PokerBotGUI
 
             while (true)
             {
-//                 Console.Clear();
-//                 foreach (Player p in players)
-//                 {
-//                     ShowPlayer(p);
-//                 }
                 deck.Shuffle();
 
                 Pot = players[dealer].PostBlind(smallBet / 2);
@@ -182,19 +182,27 @@ namespace PokerBotGUI
                 }
 
                 deck.Burn();
-                deck.Deal(players, dealer/*, hero, villain*/);
-                /*hero.DisplayHand();*/
+                deck.Deal(players, dealer);
 
                 curPlay = dealer;
                 betsThisRound = 0;
                 while (!ActionComplete())
                 {
+                    if ((hero.AllIn || villain.AllIn) && (hero.ContribToPot == villain.ContribToPot))
+                    {
+                        break;
+                    }
                     actionResult = players[curPlay].Action(pot, smallBet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
                     if (actionResult == -1)
                     {
                         WinByDefault(curPlay);
                         break;
                     }
+                    else if (players[curPlay].AllIn && (players[curPlay].ContribToPot * 2) < Pot)
+                    {
+                        RefundDiff(curPlay, Math.Abs(hero.ContribToPot - villain.ContribToPot));
+                    }
+
                     Pot += actionResult;
                     betsThisRound = hero.NumBets + villain.NumBets;
                     curPlay = NextPlayer(curPlay);
@@ -219,16 +227,7 @@ namespace PokerBotGUI
                             {
                                 villain.VillainAction = "Discards " + discards.Length + " cards";
                             }
-//                             if (Object.ReferenceEquals(players[curPlay], hero))
-//                             {
-//                                 deck.DealDiscards(hero, discards);
-//                             }
-//                             else
-//                             {
-//                                 deck.DealDiscards(villain, discards);
-//                             }
                             deck.DealDiscards(players[curPlay], discards);
-                            /*Console.WriteLine(players[curPlay].Name + " draws " + discards.Length + " cards.");*/
                         }
                         else 
                         {
@@ -236,12 +235,15 @@ namespace PokerBotGUI
                             {
                                 villain.VillainAction = "Stands Pat";
                             }
-                            /*Console.WriteLine(players[curPlay].Name + " stands pat.");*/
                         }
                         curPlay = NextPlayer(curPlay);
                     }
 
-                    //hero.DisplayHand();
+                    if (hero.AllIn || villain.AllIn)
+                    {
+                        continue;
+                    }
+
                     curPlay = NextPlayer(dealer);
 
                     if (i == 0)
@@ -261,14 +263,25 @@ namespace PokerBotGUI
                     betsThisRound = 0;
                     while (!ActionComplete())
                     {
+                        if ((hero.AllIn || villain.AllIn) && (hero.ContribToPot == villain.ContribToPot))
+                        {
+                            break;
+                        }
                         actionResult = players[curPlay].Action(pot, bet, Math.Abs(hero.ContribToPot - villain.ContribToPot), betsThisRound);
                         if (actionResult == -1)
                         {
                             WinByDefault(curPlay);
                             break;
                         }
+
                         Pot += actionResult;
                         betsThisRound = hero.NumBets + villain.NumBets;
+                        
+                        if (players[curPlay].AllIn && (players[curPlay].ContribToPot * 2) < Pot)
+                        {
+                            RefundDiff(curPlay, Math.Abs(hero.ContribToPot - villain.ContribToPot));
+                        }
+
                         curPlay = NextPlayer(curPlay);
                     }
                     if (actionResult == -1)
@@ -283,28 +296,19 @@ namespace PokerBotGUI
                 }
 
                 hero.SortHand();
-//                 Console.Write("\n\nHero: ");
-//                 hero.DisplayHand();
 
                 villain.SortHand();
                 villain.ShowHand = true;
-//                 Console.Write("Villain: ");
-//                 villain.DisplayHand();
 
                 if (hero == villain)
                 {
-                    /*Console.WriteLine("\n\nIt's a draw, both players win!");*/
                     hero.ChipStack += pot / 2;
                     villain.ChipStack += pot / 2;
                 }
                 else
                 {
-                    /*Console.WriteLine("\n\n" + Winner() + " wins");*/
                     Winner();
                 }
-
-//                 Console.WriteLine("\nPress any key to continue!");
-//                 Console.ReadKey();
 
                 int a = 100;
                 while (a > 0)

@@ -68,21 +68,33 @@ namespace PokerBotGUI
             List<string> options = new List<string>();
             input = "";
             ActedThisRound = true;
-
+            
             if ((ContribToPot * 2) == pot)
             {
                 options.Add("check");
                 options.Add("bet");
                 CheckBet = true;
+                if (ChipStack < bet)
+                {
+                    bet = ChipStack;
+                }
             }
             else if ((ContribToPot * 2) < pot)
             {
                 options.Add("fold");
                 options.Add("call");
-                if (totalBets < 4)
+                if (ChipStack < toCall)
+                {
+                    toCall = ChipStack;
+                }
+                if (totalBets < 4 && ChipStack > toCall)
                 {
                     options.Add("raise");
                     RaiseBtn = true;
+                    if (ChipStack < (toCall + bet))
+                    {
+                        bet = ChipStack - toCall;
+                    }
                 }
                 FoldCall = true;
             }
@@ -90,18 +102,6 @@ namespace PokerBotGUI
 
             while (options.Contains(input) == false)
             {
-//                 Console.Write("Action:");
-//                 foreach (string s in options)
-//                 {
-//                     Console.Write("\t" + s);
-//                 }
-//                 Console.WriteLine();
-//                 input = Console.ReadLine().ToLower();
-// 
-//                 if (options.Contains(input) == false)
-//                 {
-//                     Console.WriteLine("Input Error");
-//                 }
                 Yield(100);
             }
 
@@ -111,16 +111,12 @@ namespace PokerBotGUI
 
         private void Yield(long ticks)
         {
-
             // Note: a tick is 100 nanoseconds
-
             long dtEnd = DateTime.Now.AddTicks(ticks).Ticks;
 
             while (DateTime.Now.Ticks < dtEnd)
             {
-
                 MainWindow.tableWindow.Dispatcher.Invoke(DispatcherPriority.Background, (DispatcherOperationCallback)delegate(object unused) { return null; }, null);
-
             }
 
         }

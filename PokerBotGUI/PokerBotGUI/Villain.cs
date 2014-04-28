@@ -47,13 +47,25 @@ namespace PokerBotGUI
             {
                 options.Add("Check");
                 options.Add("Bet");
+                if (ChipStack < bet)
+                {
+                    bet = ChipStack;
+                }
             }
             else if ((ContribToPot * 2) < pot)
             {
                 options.Add("Call");
-                if (totalBets < 4)
+                if (ChipStack < toCall)
+                {
+                    toCall = ChipStack;
+                }
+                if (totalBets < 4 && ChipStack > toCall)
                 {
                     options.Add("Raise");
+                    if (ChipStack < (toCall + bet))
+                    {
+                        bet = ChipStack - toCall;
+                    }
                 }
 
             }

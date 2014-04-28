@@ -1,0 +1,27 @@
+Solution PokerBotGUI:
+	Card.cs - 100%
+	Deck.cs - 95%
+		The LoadDeckImages() is very similiar to an example on StackOverflow
+	Hand.cs - 100%
+	HandEvaluator.cs - 100%
+	MyImage.cs - 100%
+		Got the idea from StackOverflow question on loading images for use with data binding in WPF
+	Player.cs - 100%
+	Hero.cs - 90%
+		Yield() was a solution discovered by a classmate to overcome a freezing GUI
+	Villain.cs - 100%
+	Table.cs - 100%
+		Yield() is included again
+	MainWindow.xaml - 100%
+	MainWindow.xaml.cs - 100%
+	TableWindow.xaml - 90%
+		Style - MyBtnStyle is an example found online
+	TableWindow.xaml.cs - 100%
+
+
+There may be a few lines taken from MSDN, and stackoverflow that were used and/or modified in some way. The INotifyPropertyChanged method OnPropertyChanged() is one such example, and the largest. I didn't include this earlier as I believe it's close to a standard implementation
+
+
+
+NOTE:
+The Submitted folder contains 2 solutions, the first is the original console application, the second PokerBotGUI, is the current working version and the one that should be graded.

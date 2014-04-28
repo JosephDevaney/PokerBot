@@ -21,14 +21,6 @@ namespace PokerBotGUI
         public Table table;
         private string discards;
 
-//         private MyImage back;
-// 
-//         public MyImage Back
-//         {
-//             get { return back; }
-//             set { back = value; OnPropertyChanged("Back"); }
-//         }
-
         private Card heroCard0;
 
         public Card HeroCard0
@@ -43,19 +35,7 @@ namespace PokerBotGUI
             table = new Table(name, hStack, vStack, bet);
             this.DataContext = table;
             discards = "";
-            //Back = table.deck.DeckBack;
-            //card0.DataContext = table.hero;
         }
-
-//         public event PropertyChangedEventHandler PropertyChanged;
-// 
-//         protected void OnPropertyChanged(string property)
-//         {
-//             if (this.PropertyChanged != null)
-//             {
-//                 PropertyChanged(this, new PropertyChangedEventArgs(property));
-//             }
-//         }
 
         private void fold_button(object sender, RoutedEventArgs e)
         {

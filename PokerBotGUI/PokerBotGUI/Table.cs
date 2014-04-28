@@ -33,28 +33,32 @@ namespace PokerBotGUI
         public int smallBet;
         private int betsThisRound;
 
-        public Table()
+        public Table() 
+            : this("Hero", 100, 100, 2)
+        {
+
+        }
+        
+
+        public Table(string name, int hStack, int vStack, int betSize)
         {
             players = new Player[2];
             deck = new Deck();
 
-            hero = new Hero();
+            hero = new Hero(name);
             villain = new Villain();
+
+            hero.ChipStack = hStack;
+            villain.ChipStack = vStack;
+
             players[0] = hero;
             players[1] = villain;
 
             dealer = 0;
             curPlay = dealer;
             pot = 0;
-            smallBet = 2;
+            smallBet = betSize;
             betsThisRound = 0;
-
-//             villain.Card0 = deck.DeckBack;
-//             villain.Card1 = deck.DeckBack;
-//             villain.Card2 = deck.DeckBack;
-//             villain.Card3 = deck.DeckBack;
-//             villain.Card4 = deck.DeckBack;
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

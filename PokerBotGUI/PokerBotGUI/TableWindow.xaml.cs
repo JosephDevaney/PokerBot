@@ -37,10 +37,10 @@ namespace PokerBotGUI
             set { heroCard0 = value; }
         }
 
-        public TableWindow()
+        public TableWindow(string name, int hStack, int vStack, int bet)
         {
             InitializeComponent();
-            table = new Table();
+            table = new Table(name, hStack, vStack, bet);
             this.DataContext = table;
             discards = "";
             //Back = table.deck.DeckBack;

@@ -8,12 +8,18 @@ namespace PokerBotGUI
 {
     public class Hero : Player
     {
-        public Hero()
+        public Hero(string name)
         {
-            base.Name = "Hero";
+            base.Name = name;
             base.input = "";
             cardsToDiscard = "";
             TurnBtnsOff();
+        }
+
+        public Hero() 
+            : this("Hero")
+        {
+
         }
 
         public void TurnBtnsOff()
